@@ -1,1 +1,24 @@
-<p>images works!</p>
+<ng-container *ngIf="images">
+    <div class="ap-flex-container">
+        <ng-container *ngFor="let image of images">
+          <div class="ap-flex-item mb-2 mt-2">
+            <!-- <img class="ap-image" [src]="image.source" alt="loading..."> -->
+            <img [src]="image.images.original.url" alt="loading...">
+          </div>
+
+        </ng-container>
+
+        </div>
+
+
+</ng-container>
+
+<!-- .ap-grid-container
+  display: grid
+  grid-template-columns: 1fr 1fr 1fr 1fr
+  grid-template-rows: 1fr 1fr 1fr
+  grid-template-areas: ". . . ." ". . . ." ". . . ."
+
+.ap-image
+  width: 100px
+  height: 100px -->
