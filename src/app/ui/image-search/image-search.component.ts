@@ -3,6 +3,7 @@ import { ImageService } from 'src/app/images/services/image.service';
 import { tap, takeUntil, finalize } from 'rxjs/operators';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { ImageSearchService } from './image-search.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-image-search',
@@ -14,7 +15,7 @@ export class ImageSearchComponent implements OnInit {
   private unsubscribe: Subject<any>;
   public images$: BehaviorSubject<[]>;
 
-  constructor(private imageService: ImageService, private imageSearchService: ImageSearchService) {
+  constructor(private imageService: ImageService, private imageSearchService: ImageSearchService, private router: Router) {
     this.unsubscribe = new Subject();
     this.images$ = new BehaviorSubject(null);
    }
@@ -28,13 +29,14 @@ export class ImageSearchComponent implements OnInit {
       event.preventDefault();
     }
     if (searchTerm.value) {
-      this.imageService.getImages(searchTerm.value).pipe(
+      this.imageService.getImages('&q='+searchTerm.value).pipe(
         tap(response => {
-         this.imageSearchService.shareImageSearch(response.data);
+         this.imageSearchService.shareImageSearch(response);
         }),
         takeUntil(this.unsubscribe),
         finalize(() => {
         // To do: Turn off spinner
+        return this.router.navigate(['images/' + searchTerm.value]);
         })
     ).subscribe();
 
