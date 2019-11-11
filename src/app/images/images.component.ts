@@ -33,6 +33,7 @@ export class ImagesComponent implements OnInit, OnDestroy {
       } else if (response && response.data.length === 0) {
         this.pagination = null;
         this.images = null;
+        this.showSpinner = false;
       } else {
         this.loadImages();
       }
