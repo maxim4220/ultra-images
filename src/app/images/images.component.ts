@@ -2,43 +2,24 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ImageService} from './services/image.service';
 import {finalize, takeUntil, tap} from 'rxjs/operators';
 import {Subject, Subscription} from 'rxjs';
-import {ImageSearchService} from '../ui/image-search/image-search.service';
-import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-images',
   templateUrl: './images.component.html',
   styleUrls: ['./images.component.sass']
 })
-export class ImagesComponent implements OnInit, OnDestroy {
+
+export class ImagesComponent implements OnDestroy {
   public images;
   public showSpinner: boolean;
   public pagination;
+  public showDescriptionMsg = true;
 
-  private unsubscribe: Subject<any>;
+  private unsubscribe: Subject<any> = new Subject();
   private subs: Subscription;
   private searchInput;
 
-  constructor(private imageService: ImageService, private imageSearchService: ImageSearchService,
-              private activatedRoute: ActivatedRoute) {
-    this.unsubscribe = new Subject();
-  }
-
-  ngOnInit() {
-   // this.showSpinner = true;
-    // this.subs = this.imageSearchService.searchImages$.subscribe(response => {
-    //   if (response && response.data.length > 0) {
-    //     this.images = response.data;
-    //     this.pagination = response.pagination;
-    //     this.showSpinner = false;
-    //   } else if (response && response.data.length === 0) {
-    //     this.pagination = null;
-    //     this.images = null;
-    //     this.showSpinner = false;
-    //   } else {
-    //     this.loadImages();
-    //   }
-    // });
+  constructor(private imageService: ImageService) {
   }
 
   ngOnDestroy() {
@@ -46,38 +27,34 @@ export class ImagesComponent implements OnInit, OnDestroy {
   }
 
   public getPagination(event) {
-    // const searchQuery = this.activatedRoute.snapshot.paramMap.get('searchQuery');
-    // const offset = '&offset=' + event;
-    // if (searchQuery) {
-    //   const q = '&q=' + searchQuery;
-    //   this.loadImages(q, offset);
-    // } else {
-    //   this.loadImages(null, offset);
-    // }
+    console.log('event', event);
+    const offset = '&offset=' + event;
+    this.loadImages(offset);
   }
 
   public getSearchOutput( event) {
+    this.showDescriptionMsg = false;
     console.log('output ev', event);
     this.searchInput = event;
-    this.loadImages(event);
+    this.loadImages();
   }
 
-  private loadImages(searchInput) {
+  private loadImages(offset?) {
     this.showSpinner = true;
-    // let searchParams = '';
-    // if (offset) {
-    //   searchParams += offset;
-    // }
-    // if (q) {
-    //   searchParams += q;
-    // } else {
-    //   searchParams += '&q=backbone';
-    // }
-    const searchParams = '&q=' + searchInput;
+    let searchParams = '&q=' + this.searchInput;
+    if (offset) {
+      searchParams += offset;
+    }
     this.imageService.getImages(searchParams)
       .pipe(
         tap(response => {
-          this.images = response.data;
+          if (response.data.length > 0 ) {
+            this.images = response.data;
+            this.pagination = response.pagination;
+          } else {
+            this.images = null;
+            this.pagination = null;
+          }
           this.pagination = response.pagination;
         }),
         takeUntil(this.unsubscribe),
@@ -85,6 +62,6 @@ export class ImagesComponent implements OnInit, OnDestroy {
           this.showSpinner = false;
         })
       ).subscribe();
-  } 
+  }
 
 }

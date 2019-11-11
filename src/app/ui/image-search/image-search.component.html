@@ -1,6 +1,15 @@
-<form id="image-search-form" class="form-inline m-2">
-  <input #searchTerm (keydown.enter)="performSearch(searchTerm, $event)" aria-label="Search" class="form-control mr-sm-2"
-         placeholder="Search" type="search">
-  <button (click)="performSearch(searchTerm)" class="btn btn-outline-info my-2 my-sm-0" type="button">Search</button>
-</form>
-
+<form (ngSubmit)="performSearch()" [formGroup]="searchForm">
+    <div class="form-group">
+      <label for="search">Enter your search:</label>
+      <div class="input-group">
+        <input placeholder="Search..." [ngClass]="{ 'is-invalid': submitted && f.search.errors }" autocomplete="off" class="form-control" formControlName="search" id="search"
+               type="text"/>
+               <div class="input-group-append">
+                  <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+                </div>
+                <div *ngIf="submitted && f.search.errors" class="invalid-feedback">
+                    <div *ngIf="f.search.errors.required">Please enter your search queries.</div>
+                  </div>
+      </div>
+    </div>
+  </form>

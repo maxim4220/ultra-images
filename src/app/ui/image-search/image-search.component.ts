@@ -1,9 +1,5 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import {ImageService} from 'src/app/images/services/image.service';
-import {finalize, takeUntil, tap} from 'rxjs/operators';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {ImageSearchService} from './image-search.service';
-import {Router} from '@angular/router';
+import {Component, Output, EventEmitter} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-image-search',
@@ -11,40 +7,27 @@ import {Router} from '@angular/router';
   styleUrls: ['./image-search.component.sass']
 })
 
-export class ImageSearchComponent implements OnInit {
-  public images$: BehaviorSubject<[]>;
-  // private unsubscribe: Subject<any>;
-
+export class ImageSearchComponent {
   @Output() emitSearch = new EventEmitter<string>();
+  public searchForm: FormGroup;
+  public submitted = false;
 
-  constructor() {
-  //  this.unsubscribe = new Subject();
-  //  this.images$ = new BehaviorSubject(null);
+  constructor(private formBuilder: FormBuilder, ) {
+    this.searchForm = this.formBuilder.group({
+      search: ['', Validators.required],
+    });
   }
 
-  ngOnInit() {
+  get f() {
+    return this.searchForm.controls;
   }
 
-  public performSearch(searchTerm: HTMLInputElement, event?) {
-    // To do: add spinner
-    if (event) {
-      event.preventDefault();
+  public performSearch() {
+    this.submitted = true;
+    if (this.searchForm.invalid) {
+      return;
     }
-    if (searchTerm.value) {
-      this.emitSearch.emit(searchTerm.value);
-
-      // this.imageService.getImages('&q=' + searchTerm.value).pipe(
-      //   tap(response => {
-      //     this.imageSearchService.shareImageSearch(response);
-      //   }),
-      //   takeUntil(this.unsubscribe),
-      //   finalize(() => {
-      //     // To do: Turn off spinner
-      //     return this.router.navigate(['images/' + searchTerm.value]);
-      //   })
-      // ).subscribe();
-
-    }
+    this.emitSearch.emit( this.f.search.value);
   }
 
 }
