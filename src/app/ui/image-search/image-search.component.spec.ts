@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ImageSearchComponent } from './image-search.component';
+import {ImageSearchComponent} from './image-search.component';
 
 describe('ImageSearchComponent', () => {
   let component: ImageSearchComponent;
@@ -8,9 +8,9 @@ describe('ImageSearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImageSearchComponent ]
+      declarations: [ImageSearchComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

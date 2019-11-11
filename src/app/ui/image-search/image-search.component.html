@@ -1,5 +1,6 @@
 <form class="form-inline">
-    <input #searchTerm  (keydown.enter)="performSearch(searchTerm, $event)" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-    <button (click)="performSearch(searchTerm)"class="btn btn-outline-info my-2 my-sm-0" type="button">Search</button>
-  </form>
+  <input #searchTerm (keydown.enter)="performSearch(searchTerm, $event)" aria-label="Search" class="form-control mr-sm-2"
+         placeholder="Search" type="search">
+  <button (click)="performSearch(searchTerm)" class="btn btn-outline-info my-2 my-sm-0" type="button">Search</button>
+</form>
 

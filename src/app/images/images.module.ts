@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ImagesComponent } from './images.component';
-import { Routes, RouterModule } from '@angular/router';
-import { UiModule } from '../ui/ui.module';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ImagesComponent} from './images.component';
+import {RouterModule, Routes} from '@angular/router';
+import {UiModule} from '../ui/ui.module';
 
 const routes: Routes = [
   {
@@ -31,5 +31,5 @@ const routes: Routes = [
   ]
 })
 
-export class ImagesModule { 
+export class ImagesModule {
 }
