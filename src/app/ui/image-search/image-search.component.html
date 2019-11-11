@@ -1,4 +1,4 @@
-<form class="form-inline">
+<form id="image-search-form" class="form-inline m-2">
   <input #searchTerm (keydown.enter)="performSearch(searchTerm, $event)" aria-label="Search" class="form-control mr-sm-2"
          placeholder="Search" type="search">
   <button (click)="performSearch(searchTerm)" class="btn btn-outline-info my-2 my-sm-0" type="button">Search</button>

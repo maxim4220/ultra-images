@@ -1,4 +1,4 @@
-<nav *ngIf="pagination">
+<nav *ngIf="pagination && pagination.count > 0">
   <ul class="pagination pagination-lg">
 
     <li [ngClass]="{disabled: pagination.offset  == 0}" class="page-item ">
@@ -6,21 +6,18 @@
     </li>
 
     <li *ngIf="pagination.offset  != 0" class="page-item"><a (click)="startPagination(pagination.offset - pagination.count)"
-                                                             class="page-link">{{pagination.offset / 25  }}</a>
+                                                             class="page-link">{{ currentPage - 1 }}</a>
     </li>
 
     <li class="page-item active">
-      <a *ngIf="pagination.offset == 0; else curPageBlock" class="page-link">{{pagination.offset + 1 }} </a>
-      <ng-template #curPageBlock>
-        <a class="page-link">{{pagination.offset / pagination.count + 1 }} </a>
-      </ng-template>
+      <a  class="page-link">{{ currentPage  }} </a>
     </li>
 
-    <li class="page-item"><a (click)="startPagination(pagination.offset + pagination.count)"
-                             class="page-link">{{pagination.offset / pagination.count + 2  }}</a>
+    <li *ngIf="pagination.total_count <= pagination.offset + pagination.count" class="page-item"><a (click)="startPagination(pagination.offset + pagination.count)"
+                             class="page-link">{{currentPage + 1  }}</a>
     </li>
 
-    <li class="page-item">
+    <li [ngClass]="{disabled: pagination.total_count <= pagination.offset + pagination.count}" class="page-item">
       <a (click)="startPagination(pagination.offset + pagination.count)" class="page-link">Next</a>
     </li>
   </ul>
