@@ -4,11 +4,11 @@
   <div *ngIf="images; else notFoundBlock" class="ap-flex-container">
       <ng-container *ngFor="let image of images">
         <div class="ap-flex-item mb-2 mt-2">
-          <!-- <img class="ap-image" [src]="image.source" alt="loading..."> -->
-          <img [src]="image.images.original.url" alt="loading...">
+          <img class="ap-image" [src]="image.images.original.url" alt="loading...">
         </div>
       </ng-container>
-      </div>
+    </div> 
+    <app-pagination *ngIf="pagination" (emitPagination)="getPagination($event)" [pagination]="pagination"></app-pagination>
 </ng-template>
 
 <ng-template #notFoundBlock>
@@ -16,7 +16,6 @@
     <h3>We're Sorry!</h3>
     <h5>We can't seem to find any images that match your search.</h5>
   </div>
- 
 </ng-template>
 
 
