@@ -1,1 +1,25 @@
-<p>pagination works!</p>
+<nav *ngIf="pagination">
+    <ul class="pagination pagination-lg">
+
+        <li class="page-item " [ngClass]="{disabled: pagination.offset  == 0}">
+            <a class="page-link" (click)="startPagination(pagination.offset - pagination.count)">Previous</a>
+        </li>
+
+        <li *ngIf="pagination.offset  != 0" class="page-item"><a class="page-link"
+                (click)="startPagination(pagination.offset - pagination.count)">{{pagination.offset / 25  }}</a></li>
+
+        <li class="page-item active">
+            <a *ngIf="pagination.offset == 0; else curPageBlock" class="page-link">{{pagination.offset + 1 }} </a>
+            <ng-template #curPageBlock>
+                    <a  class="page-link">{{pagination.offset / pagination.count + 1 }} </a>
+            </ng-template>
+        </li>
+
+        <li  class="page-item"><a class="page-link"
+            (click)="startPagination(pagination.offset + pagination.count)">{{pagination.offset / pagination.count + 2  }}</a></li>
+
+        <li class="page-item">
+            <a class="page-link" (click)="startPagination(pagination.offset + pagination.count)">Next</a>
+        </li>
+    </ul>
+</nav>
