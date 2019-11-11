@@ -15,6 +15,10 @@ const routes: Routes = [
         pathMatch: 'full'
       },
     ]
+  },
+  {
+    path: ':searchQuery',
+    component: ImagesComponent,
   }
 ];
 
