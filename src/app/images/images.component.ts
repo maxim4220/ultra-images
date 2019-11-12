@@ -27,14 +27,12 @@ export class ImagesComponent implements OnDestroy {
   }
 
   public getPagination(event) {
-    console.log('event', event);
     const offset = '&offset=' + event;
     this.loadImages(offset);
   }
 
   public getSearchOutput(event) {
     this.showMessage = false;
-    console.log('output ev', event);
     this.searchInput = event;
     this.loadImages();
   }
