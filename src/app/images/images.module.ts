@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {ImagesComponent} from './images.component';
 import {RouterModule, Routes} from '@angular/router';
 import {UiModule} from '../ui/ui.module';
+import { ImageService } from './services/image.service';
 
 const routes: Routes = [
   {
@@ -28,7 +29,10 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     UiModule
-  ]
+  ],
+  providers: [
+    ImageService,
+   ],
 })
 
 export class ImagesModule {
