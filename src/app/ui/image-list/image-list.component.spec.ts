@@ -16,7 +16,7 @@ describe('ImageListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ImageListComponent);
     component = fixture.componentInstance;
-  
+
     fixture.detectChanges();
   });
 

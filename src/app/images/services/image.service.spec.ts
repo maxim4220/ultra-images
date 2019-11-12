@@ -1,8 +1,8 @@
-import { Observable } from 'rxjs';
-import {TestBed, inject, getTestBed} from '@angular/core/testing';
+import {Observable} from 'rxjs';
+import {TestBed} from '@angular/core/testing';
 
 import {ImageService} from './image.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 
 
 describe('ImageService', () => {
@@ -21,17 +21,17 @@ describe('ImageService', () => {
 
   it('should get the data successful from Giphy', () => {
     service.getImages('&q=10').subscribe((result: Observable<any>) => {
-      expect(result).toBeDefined(); 
+      expect(result).toBeDefined();
     });
     const req = httpMock.expectOne('http://api.giphy.com/v1/gifs/search?api_key=krYLN9xmR99j1WQkm5nERGA0w3bXmD2D&q=10');
-    expect(req.request.method).toBe('GET')
+    expect(req.request.method).toBe('GET');
     req.flush(10);
     httpMock.verify();
   });
 
   it('should be created', () => {
-        expect(service).toBeTruthy();
-      });
+    expect(service).toBeTruthy();
+  });
 
 });
 

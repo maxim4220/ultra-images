@@ -19,10 +19,7 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.showNextButton = true;
-    if (this.pagination.total_count === this.pagination.offset + this.pagination.count) {
-      this.showNextButton = false;
-    }
+    this.showNextButton = this.pagination.total_count !== this.pagination.offset + this.pagination.count;
     if (this.pagination.offset === 0) {
       this.currentPage = 1;
     } else {

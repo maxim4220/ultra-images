@@ -1,7 +1,7 @@
-import {Component, OnDestroy, } from '@angular/core';
+import {Component, OnDestroy,} from '@angular/core';
 import {ImageService} from './services/image.service';
 import {finalize, takeUntil, tap} from 'rxjs/operators';
-import {Subject, } from 'rxjs';
+import {Subject,} from 'rxjs';
 
 @Component({
   selector: 'app-images',
@@ -26,7 +26,7 @@ export class ImagesComponent implements OnDestroy {
     this.unsubscribe.complete();
   }
 
-  public getPagination(event): void{
+  public getPagination(event): void {
     const offset = '&offset=' + event;
     this.loadImages(offset);
   }
@@ -46,14 +46,14 @@ export class ImagesComponent implements OnDestroy {
     this.imageService.getImages(searchParams)
       .pipe(
         tap(response => {
-          if (response.data.length > 0 ) {
+          if (response.data.length > 0) {
             this.images = response.data;
             this.pagination = response.pagination;
           } else {
             this.images = null;
             this.pagination = null;
           }
-          this.pagination = response.pagination;
+         // this.pagination = response.pagination;
         }),
         takeUntil(this.unsubscribe),
         finalize(() => {
