@@ -16,14 +16,14 @@ export class ImagesComponent implements OnDestroy {
   public showDescriptionMsg = true;
 
   private unsubscribe: Subject<any> = new Subject();
-  private subs: Subscription;
   private searchInput;
 
   constructor(private imageService: ImageService) {
   }
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   public getPagination(event) {
