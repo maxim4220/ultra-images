@@ -11,7 +11,7 @@ import {Subject, } from 'rxjs';
 
 export class ImagesComponent implements OnDestroy {
   public images: any;
-  public pagination = {};
+  public pagination: {};
   public showSpinner = false;
   public showMessage = true;
 
