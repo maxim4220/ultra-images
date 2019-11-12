@@ -10,13 +10,13 @@ import {Subject, } from 'rxjs';
 })
 
 export class ImagesComponent implements OnDestroy {
-  public images;
-  public showSpinner: boolean;
-  public pagination;
-  public showDescriptionMsg = true;
+  public images: any;
+  public pagination = {};
+  public showSpinner = false;
+  public showMessage = true;
 
   private unsubscribe: Subject<any> = new Subject();
-  private searchInput;
+  private searchInput: string;
 
   constructor(private imageService: ImageService) {
   }
@@ -32,8 +32,8 @@ export class ImagesComponent implements OnDestroy {
     this.loadImages(offset);
   }
 
-  public getSearchOutput( event) {
-    this.showDescriptionMsg = false;
+  public getSearchOutput(event) {
+    this.showMessage = false;
     console.log('output ev', event);
     this.searchInput = event;
     this.loadImages();
