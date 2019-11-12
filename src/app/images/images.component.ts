@@ -26,18 +26,18 @@ export class ImagesComponent implements OnDestroy {
     this.unsubscribe.complete();
   }
 
-  public getPagination(event) {
+  public getPagination(event): void{
     const offset = '&offset=' + event;
     this.loadImages(offset);
   }
 
-  public getSearchOutput(event) {
+  public getSearchOutput(event): void {
     this.showMessage = false;
     this.searchInput = event;
     this.loadImages();
   }
 
-  private loadImages(offset?) {
+  private loadImages(offset?): void {
     this.showSpinner = true;
     let searchParams = '&q=' + this.searchInput;
     if (offset) {
