@@ -1,6 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ImageSearchComponent} from './image-search.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ImageSearchComponent', () => {
   let component: ImageSearchComponent;
@@ -8,7 +10,8 @@ describe('ImageSearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ImageSearchComponent]
+      declarations: [ImageSearchComponent],
+      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule,]
     })
       .compileComponents();
   }));
@@ -22,4 +25,6 @@ describe('ImageSearchComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });
+ 

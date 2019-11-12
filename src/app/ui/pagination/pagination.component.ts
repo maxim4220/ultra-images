@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, OnInit, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnChanges} from '@angular/core';
 
 @Component({
   selector: 'app-pagination',
@@ -6,16 +6,12 @@ import {Component, EventEmitter, Input, Output, OnInit, OnChanges} from '@angula
   styleUrls: ['./pagination.component.sass']
 })
 
-export class PaginationComponent implements OnInit, OnChanges {
+export class PaginationComponent implements  OnChanges {
   public currentPage: number;
   public count: number;
   public showNextButton = true;;
   @Input() pagination: any;
   @Output() emitPagination = new EventEmitter<string>();
-
-  ngOnInit() {
-    this.count = this.pagination.count;
-  }
 
   ngOnChanges() {
     console.log('pagination', this.pagination);
@@ -27,7 +23,7 @@ export class PaginationComponent implements OnInit, OnChanges {
     } else {
       if(this.pagination.offset % this.pagination.count === 0) {
         this.currentPage = this.pagination.offset / this.pagination.count + 1;
-      } 
+      }
     }
   }
 
