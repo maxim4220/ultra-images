@@ -47,16 +47,19 @@ describe('ImagesComponent', () => {
     expect(component.showMessage).toBe(true);
     component.getSearchOutput('dog');
     expect(component.showMessage).toBe(false);
+    expect(component.showSpinner).toBe(true);
   });
 
   it('should call ImageService getImages method when getSearch has been called', () => {
    component.getSearchOutput('dog');
+   expect(component.showSpinner).toBe(true);
    expect(serviceSpy).toHaveBeenCalled();
   });
 
   it('should call ImageService getImages method when getPagination has been called', () => {
     expect(serviceSpy).not.toHaveBeenCalled();
     component.getPagination(25);
+    expect(component.showSpinner).toBe(true);
     expect(serviceSpy).toHaveBeenCalled();
    });
 
