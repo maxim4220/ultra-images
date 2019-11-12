@@ -1,15 +1,9 @@
-<form (ngSubmit)="performSearch()" [formGroup]="searchForm">
-    <div class="form-group">
-      <label for="search">Enter your search:</label>
-      <div class="input-group">
-        <input placeholder="Search..." [ngClass]="{ 'is-invalid': submitted && f.search.errors }" autocomplete="off" class="form-control" formControlName="search" id="search"
-               type="text"/>
-               <div class="input-group-append">
-                  <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
-                </div>
-                <div *ngIf="submitted && f.search.errors" class="invalid-feedback">
-                    <div *ngIf="f.search.errors.required">Please enter your search queries.</div>
-                  </div>
-      </div>
+<form novalidate (ngSubmit)="performSearch()">
+    <div class="input-group">
+      <input [formControl]="searchForm" placeholder="Search..." autocomplete="off" class="form-control" id="search"
+      type="text"/>
+      <div class="input-group-append">
+         <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+       </div>
     </div>
   </form>

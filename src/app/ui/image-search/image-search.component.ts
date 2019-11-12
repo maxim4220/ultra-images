@@ -1,5 +1,5 @@
 import {Component, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-image-search',
@@ -9,25 +9,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 export class ImageSearchComponent {
   @Output() emitSearch = new EventEmitter<string>();
-  public searchForm: FormGroup;
-  public submitted = false;
+  public searchForm: FormControl = new FormControl('');
 
-  constructor(private formBuilder: FormBuilder, ) {
-    this.searchForm = this.formBuilder.group({
-      search: ['', Validators.required],
-    });
-  }
-
-  get f() {
-    return this.searchForm.controls;
-  }
-
-  public performSearch() {
-    this.submitted = true;
-    if (this.searchForm.invalid) {
-      return;
-    }
-    this.emitSearch.emit( this.f.search.value);
+  public performSearch(): void {
+   this.emitSearch.emit(this.searchForm.value);
   }
 
 }
