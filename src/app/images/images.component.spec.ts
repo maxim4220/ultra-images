@@ -9,10 +9,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ImageService } from './services/image.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { DebugElement } from '@angular/core';
 
 describe('ImagesComponent', () => {
   let component: ImagesComponent;
   let fixture: ComponentFixture<ImagesComponent>;
+  let service: ImageService;
+  let debugElement: DebugElement;
+  let serviceSpy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,9 +31,33 @@ describe('ImagesComponent', () => {
     fixture = TestBed.createComponent(ImagesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    debugElement = fixture.debugElement;
+
+    service = debugElement.injector.get(ImageService);
+    serviceSpy = spyOn(service, 'getImages').and.callThrough();
+
   });
 
-  it('should create', () => {
+  it('should create images component', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should should reassign properties when pagination called', () => {
+    component.getPagination(25);
+    expect(component.showMessage).toBe(true);
+    component.getSearchOutput('dog');
+    expect(component.showMessage).toBe(false);
+  });
+
+  it('should call ImageService getImages method when getSearch has been called', () => {
+   component.getSearchOutput('dog');
+   expect(serviceSpy).toHaveBeenCalled();
+  });
+
+  it('should call ImageService getImages method when getPagination has been called', () => {
+    expect(serviceSpy).not.toHaveBeenCalled();
+    component.getPagination(25);
+    expect(serviceSpy).toHaveBeenCalled();
+   });
+
 });
