@@ -7,11 +7,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 
 describe('ImageService', () => {
-  // beforeEach(() => TestBed.configureTestingModule({
-  //   providers: [
-  //     ImageService,
-  //   ],
-  // }));
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       //providers: [ImageService]
