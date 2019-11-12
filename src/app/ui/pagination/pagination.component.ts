@@ -7,23 +7,27 @@ import {Component, EventEmitter, Input, Output, OnInit, OnChanges} from '@angula
 })
 
 export class PaginationComponent implements OnInit, OnChanges {
-  public currentPage;
+  public currentPage: number;
   public count: number;
+  public showNextButton = true;;
   @Input() pagination: any;
   @Output() emitPagination = new EventEmitter<string>();
 
   ngOnInit() {
     this.count = this.pagination.count;
-    console.log('111', this.count);
   }
 
   ngOnChanges() {
     console.log('pagination', this.pagination);
+    if(this.pagination.total_count === this.pagination.offset + this.pagination.count) {
+      this.showNextButton = false;
+    }
     if (this.pagination.offset === 0) {
       this.currentPage = 1;
     } else {
-      this.currentPage = Math.floor(this.pagination.offset / this.pagination.count) + 1;
-      console.log('this.currentPage', this.currentPage );
+      if(this.pagination.offset % this.pagination.count === 0) {
+        this.currentPage = this.pagination.offset / this.pagination.count + 1;
+      } 
     }
   }
 
