@@ -16,10 +16,16 @@ describe('ImageListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ImageListComponent);
     component = fixture.componentInstance;
+  
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should not have any value by default', () => {
+    expect(component.images).toEqual([]);
+  });
+
 });
