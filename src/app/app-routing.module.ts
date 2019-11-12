@@ -1,11 +1,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import { ImagesModule } from './images/images.module';
+import { ImagesComponent } from './images/images.component';
 
 
 const routes: Routes = [
   {
     path: 'images',
-    loadChildren: () => import('./images/images.module').then(m => m.ImagesModule)
+    component: ImagesComponent
   },
   {
     path: '**',

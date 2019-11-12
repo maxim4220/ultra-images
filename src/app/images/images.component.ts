@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, } from '@angular/core';
 import {ImageService} from './services/image.service';
 import {finalize, takeUntil, tap} from 'rxjs/operators';
-import {Subject, Subscription} from 'rxjs';
+import {Subject, } from 'rxjs';
 
 @Component({
   selector: 'app-images',
