@@ -1,4 +1,4 @@
-<app-image-search  (emitSearch)="getSearchOutput($event)"></app-image-search>
+<app-image-search (emitSearch)="getSearchOutput($event)"></app-image-search>
 <ng-container *ngIf="showDescriptionMsg">
   <h3 id="ap-description" class="mt-4">Please enter your search parameters</h3>
 </ng-container>
@@ -6,7 +6,7 @@
 <ng-template #loadedBlock>
   <app-image-list *ngIf="!showDescriptionMsg" [images]="images"></app-image-list>
 </ng-template>
-<app-pagination *ngIf="pagination" (emitPagination)="getPagination($event)"  [pagination]="pagination"></app-pagination>
+<app-pagination *ngIf="pagination" (emitPagination)="getPagination($event)" [pagination]="pagination"></app-pagination>
 
 
 
