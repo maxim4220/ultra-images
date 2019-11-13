@@ -25,7 +25,7 @@ describe('ImageListComponent', () => {
   });
 
   it('should not have any value by default', () => {
-    expect(component.images).toEqual([]);
+    expect(component.images).not.toBeDefined();
   });
 
 });
