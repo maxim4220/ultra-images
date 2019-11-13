@@ -1,7 +1,7 @@
 <h1 id="main-page-title">Welcome to giphy search page!</h1>
 <app-image-search (emitSearch)="getSearchOutput($event)"></app-image-search>
 <ng-container *ngIf="showMessage">
-  <h3 id="ap-description" class="mt-4">Please enter your search parameters</h3>
+  <h3 id="ap-description" class="mt-4">Please enter your search parameters...</h3>
 </ng-container>
 <app-spinner *ngIf="showSpinner; else loadedBlock"></app-spinner>
 <ng-template #loadedBlock>

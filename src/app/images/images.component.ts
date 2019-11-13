@@ -53,7 +53,6 @@ export class ImagesComponent implements OnDestroy {
             this.images = null;
             this.pagination = null;
           }
-         // this.pagination = response.pagination;
         }),
         takeUntil(this.unsubscribe),
         finalize(() => {
