@@ -9,10 +9,10 @@ import { FormControl } from '@angular/forms';
 
 export class ImageSearchComponent {
   @Output() emitSearch = new EventEmitter<string>();
-  public searchForm: FormControl = new FormControl('');
+  public search: FormControl = new FormControl('');
 
   public performSearch(): void {
-   this.emitSearch.emit(this.searchForm.value);
+   this.emitSearch.emit(this.search.value);
   }
 
 }

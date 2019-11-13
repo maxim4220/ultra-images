@@ -28,7 +28,7 @@ describe('ImageSearchComponent', () => {
   });
 
   it('should have search form value as empty string by default', () => {
-    expect(component.searchForm.value).toBe('');
+    expect(component.search.value).toBe('');
   });
 
   it('should enter input text and receive on submit', () => {
