@@ -2,6 +2,7 @@ import {Component, OnDestroy,} from '@angular/core';
 import {ImageService} from './services/image.service';
 import {finalize, takeUntil, tap} from 'rxjs/operators';
 import {Subject,} from 'rxjs';
+import { Images } from './interfaces/images-interface';
 
 @Component({
   selector: 'app-images',
@@ -10,7 +11,7 @@ import {Subject,} from 'rxjs';
 })
 
 export class ImagesComponent implements OnDestroy {
-  public images: any;
+  public images: Images;
   public pagination: {};
   public showSpinner = false;
   public showMessage = true;
