@@ -2,6 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {PaginationComponent} from './pagination.component';
 import {Component} from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('PaginationComponent', () => {
   let component: PaginationComponent;
@@ -9,7 +10,7 @@ describe('PaginationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PaginationComponent, TestHostComponent]
+      declarations: [PaginationComponent]
     })
       .compileComponents();
   }));
@@ -17,37 +18,25 @@ describe('PaginationComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PaginationComponent);
     component = fixture.componentInstance;
+    component.pagination = { count: 25, offset: 0, total_count: 100};
     fixture.detectChanges();
-
   });
 
   it('should create pagination component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show pagination buttons, current page will be 1 by default', () => {
-    component.pagination = {count: 25, offset: 0, total_count: 100};
+  it('should have current page equal to 1 by default', () => {
     component.ngOnChanges();
     fixture.detectChanges();
     expect(component.currentPage).toBe(1);
-
   });
 
-  it('should have all public properties undefined by default in case no data has been provided to input', () => {
-    // component.ngOnChanges();
-    // fixture.detectChanges();
-    // expect(component.currentPage).toBe(1);
-  });
-
-  @Component({
-    selector: `app-host-component`,
-    template: `
-        <app-pagination [pagination]="testPagination"></app-pagination>`
+  it('should not have pagination buttons unless data is received', () => {
+   let addItemDebugElement = fixture.debugElement.query(By.css('.page-item active'));
+   expect(addItemDebugElement).toBeFalsy();
   })
 
-  class TestHostComponent {
-    public testPagination = {count: 25, offset: 0, total_count: 100};
-  }
 });
 
 

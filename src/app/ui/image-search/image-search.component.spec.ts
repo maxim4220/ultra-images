@@ -32,13 +32,10 @@ describe('ImageSearchComponent', () => {
   });
 
   it('should enter input text and receive on submit', () => {
-    fixture.whenStable().then(() => {
       const input = fixture.debugElement.query(By.css('input'));
       const el = input.nativeElement;
       expect(el.value).toBe('');
       el.value = 'cat';
-      el.dispatchEvent(new Event('input'));
       expect(el.value).toBe('cat');
-    });
   });
 });
