@@ -1,5 +1,5 @@
-import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
+import {AppPage} from './app.po';
+import {browser, logging} from 'protractor';
 
 describe('workspace-project App', () => {
   let page: AppPage;
@@ -10,7 +10,35 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('test-ultra app is running!');
+    expect(page.getTitleText()).toEqual('Welcome to giphy search page!');
+  });
+
+  it('should be able to enter the text to search input and see images as a result that will display 25 images by default', () => {
+    page.getSearchInput().sendKeys('cat');
+    page.triggerSearchWithEnter();
+    expect(page.getImageElements()).toBeTruthy();
+    expect(page.getImageElements().count()).toBe(25);
+    browser.sleep(3000); // just to see in action. remove browser sleep
+  });
+
+  it('should scroll down and see the pagination with current page of 1', () => {
+    page.scrollDown();
+    const currentPage = page.currentPaginationPage();
+    expect(currentPage).toBeTruthy();
+    expect(currentPage.getText()).toBe('1');
+  });
+
+  it('should click second page pagination button and see new images, new current page must be 2', () => {
+    page.clickPaginationSecondPage();
+    page.scrollDown();
+    expect(page.currentPaginationPage().getText()).toBe('2');
+  });
+
+  it('should enter a new search that is wrong and instead of images - not found message will be shown.', () => {
+    page.getSearchInput().clear();
+    page.getSearchInput().sendKeys('weghegwjiewgweggwegevwegtrsjstrjdtyk');
+    page.triggerSearchWithEnter();
+    expect(page.getNotFoundBlock().getText()).toContain('We\'re Sorry!');
   });
 
   afterEach(async () => {

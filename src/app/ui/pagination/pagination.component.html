@@ -13,7 +13,7 @@
                              class="page-link">{{currentPage + 1  }}</a>
     </li>
     <li [ngClass]="{disabled: !showNextButton }" class="page-item">
-      <a (click)="startPagination(pagination.offset + countStep)" class="page-link">Next</a>
+      <a (click)="startPagination(pagination.offset + countStep)" id="next-page" class="page-link">Next</a>
     </li>
   </ul>
 </nav>
