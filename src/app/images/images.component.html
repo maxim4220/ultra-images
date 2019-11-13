@@ -1,3 +1,4 @@
+<div class="ap-main-container">
 <h1 id="main-page-title">Welcome to giphy search page!</h1>
 <app-image-search (emitSearch)="getSearchOutput($event)"></app-image-search>
 <ng-container *ngIf="showMessage">
@@ -8,7 +9,7 @@
   <app-image-list *ngIf="!showMessage" [images]="images"></app-image-list>
 </ng-template>
 <app-pagination *ngIf="pagination" (emitPagination)="getPagination($event)" [pagination]="pagination"></app-pagination>
-
+</div>
 
 
 
