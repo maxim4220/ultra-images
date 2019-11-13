@@ -6,5 +6,5 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./image-list.component.sass']
 })
 export class ImageListComponent {
-  @Input() images: any = [];
+  @Input() images: [];
 }
