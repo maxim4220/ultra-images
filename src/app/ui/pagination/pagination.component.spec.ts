@@ -1,7 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
 import {PaginationComponent} from './pagination.component';
-import {Component} from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 describe('PaginationComponent', () => {
@@ -32,10 +30,33 @@ describe('PaginationComponent', () => {
     expect(component.currentPage).toBe(1);
   });
 
+  it('should have next page button', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('#next-page').textContent).toBe('Next');
+  });
+
+  it('should change current page based on offset', () => {
+    component.pagination.offset = 25;
+    component.ngOnChanges();
+    fixture.detectChanges();
+    expect(component.currentPage).toBe(2);
+  });
+
   it('should not have pagination buttons unless data is received', () => {
    let addItemDebugElement = fixture.debugElement.query(By.css('.page-item active'));
    expect(addItemDebugElement).toBeFalsy();
-  })
+  });
+
+  it('should output increased pagination offset when pagination triggered', () => {
+    let submitEl = fixture.debugElement.query(By.css('#next-page'));
+    component.emitPagination.subscribe(offset => {
+      component.pagination.offset += offset;
+    })
+    submitEl.triggerEventHandler('click', null);
+    expect(component.pagination.offset).toBe(25);
+   });
+
+
 
 });
 
