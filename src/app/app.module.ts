@@ -8,21 +8,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { ImagesModule } from './images/images.module';
 import { UiModule } from './ui/ui.module';
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ImagesModule,
-    UiModule
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ImagesModule, UiModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-
-export class AppModule {
-}
+export class AppModule {}

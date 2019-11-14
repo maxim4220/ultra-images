@@ -8,9 +8,8 @@ describe('ImageListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ImageListComponent]
-    })
-      .compileComponents();
+      declarations: [ImageListComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -27,5 +26,4 @@ describe('ImageListComponent', () => {
   it('should not have any value by default', () => {
     expect(component.images).not.toBeDefined();
   });
-
 });
