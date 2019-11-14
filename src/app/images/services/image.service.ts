@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { ApiConfig } from 'api-config';
+import { ApiConfig } from 'src/app/api-config';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ImageService {
-  private api = new ApiConfig().searchApi;
+  private api = ApiConfig.searchApi;
   private apiKey = environment.apiKey;
 
   constructor(private http: HttpClient) {}
