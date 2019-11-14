@@ -4,9 +4,8 @@ import { Pagination } from '../interfaces/pagination.interface';
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.sass']
+  styleUrls: ['./pagination.component.sass'],
 })
-
 export class PaginationComponent implements OnChanges {
   public currentPage: number;
   public countStep = 25;
@@ -31,5 +30,4 @@ export class PaginationComponent implements OnChanges {
   public startPagination(offset) {
     return this.emitPagination.emit(offset);
   }
-
 }
