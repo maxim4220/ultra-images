@@ -3,6 +3,7 @@ import { ImageService } from './services/image.service';
 import { takeUntil, map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+
 @Component({
   selector: 'app-images',
   templateUrl: './images.component.html',
@@ -17,7 +18,7 @@ export class ImagesComponent implements OnDestroy {
   private unsubscribe: Subject<any> = new Subject();
   private searchInput: string;
 
-  constructor(private imageService: ImageService) {}
+  constructor(private imageService: ImageService) { }
 
   ngOnDestroy() {
     this.unsubscribe.next();
@@ -41,30 +42,25 @@ export class ImagesComponent implements OnDestroy {
     if (offset) {
       searchParams += offset;
     }
-    this.imageService
-      .getImages(searchParams)
-      .pipe(
-        map(response => {
-          const images = [];
-          response.data.forEach(element => {
-            images.push(element.images.original.url);
-          });
-          return {
-            images,
-            pagination: response.pagination,
-          };
-        }),
-        takeUntil(this.unsubscribe)
-      )
-      .subscribe(result => {
-        if (result.images.length > 0) {
-          this.images = result.images;
-          this.pagination = result.pagination;
-        } else {
-          this.images = null;
-          this.pagination = null;
-        }
-        this.showSpinner = false;
+    this.imageService.getImages(searchParams).pipe(map((response) => {
+      const images = [];
+      response.data.forEach(element => {
+        images.push(element.images.original.url);
       });
+      return {
+        images,
+        pagination: response.pagination
+      }
+    }), takeUntil(this.unsubscribe),
+    ).subscribe(result => {
+      if (result.images.length > 0) {
+        this.images = result.images;
+        this.pagination = result.pagination;
+      } else {
+        this.images = null;
+        this.pagination = null;
+      }
+      this.showSpinner = false;
+    })
   }
 }
