@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter} from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -12,7 +12,7 @@ export class ImageSearchComponent {
   public search: FormControl = new FormControl('');
 
   public performSearch(): void {
-   this.emitSearch.emit(this.search.value);
+    this.emitSearch.emit(this.search.value);
   }
 
 }
