@@ -47,7 +47,7 @@ export class ImagesComponent implements OnDestroy {
         map(response => {
           const images = [];
           response.data.forEach(element => {
-            images.push(element.images.downsized_still.url);
+            images.push(element.images.fixed_width_downsampled.url);
           });
           return {
             images,
