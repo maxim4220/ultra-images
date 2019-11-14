@@ -2,20 +2,23 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ImagesComponent } from './images/images.component';
 
+
 const routes: Routes = [
   {
     path: 'images',
-    component: ImagesComponent,
+    component: ImagesComponent
   },
   {
     path: '**',
     redirectTo: 'images',
-    pathMatch: 'full',
+    pathMatch: 'full'
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+
+export class AppRoutingModule {
+}

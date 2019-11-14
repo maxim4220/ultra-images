@@ -8,7 +8,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ImageSearchComponent, SpinnerComponent, PaginationComponent, ImageListComponent],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  exports: [ImageSearchComponent, SpinnerComponent, PaginationComponent, ImageListComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
+  exports: [
+    ImageSearchComponent, SpinnerComponent, PaginationComponent, ImageListComponent
+  ]
 })
-export class UiModule {}
+
+export class UiModule {
+}

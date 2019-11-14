@@ -12,8 +12,9 @@ describe('ImageSearchComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ImageSearchComponent],
-      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
-    }).compileComponents();
+      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule]
+    })
+      .compileComponents();
   }));
 
   beforeEach(() => {

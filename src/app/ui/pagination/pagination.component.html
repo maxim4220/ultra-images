@@ -1,18 +1,18 @@
 <nav *ngIf="pagination && pagination.count > 0">
   <ul class="pagination pagination-lg">
-    <li [ngClass]="{ disabled: pagination.offset === 0 }" class="page-item ">
+    <li [ngClass]="{disabled: pagination.offset  === 0}" class="page-item ">
       <a (click)="startPagination(pagination.offset - countStep)" class="page-link">Previous</a>
     </li>
-    <li *ngIf="pagination.offset !== 0" class="page-item">
-      <a (click)="startPagination(pagination.offset - countStep)" class="page-link">{{ currentPage - 1 }}</a>
+    <li *ngIf="pagination.offset  !== 0" class="page-item"><a (click)="startPagination(pagination.offset - countStep)"
+        class="page-link">{{ currentPage - 1 }}</a>
     </li>
     <li class="page-item active">
-      <a class="page-link">{{ currentPage }} </a>
+      <a class="page-link">{{ currentPage  }} </a>
     </li>
-    <li *ngIf="showNextButton" class="page-item">
-      <a (click)="startPagination(pagination.offset + countStep)" class="page-link">{{ currentPage + 1 }}</a>
+    <li *ngIf="showNextButton" class="page-item"><a (click)="startPagination(pagination.offset + countStep)"
+        class="page-link">{{currentPage + 1  }}</a>
     </li>
-    <li [ngClass]="{ disabled: !showNextButton }" class="page-item">
+    <li [ngClass]="{disabled: !showNextButton }" class="page-item">
       <a (click)="startPagination(pagination.offset + countStep)" id="next-page" class="page-link">Next</a>
     </li>
   </ul>

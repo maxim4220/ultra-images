@@ -22,8 +22,9 @@ describe('ImagesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ImagesComponent, ImageSearchComponent, PaginationComponent, ImageListComponent, SpinnerComponent],
       imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
-      providers: [ImageService],
-    }).compileComponents();
+      providers: [ImageService]
+    })
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -34,6 +35,7 @@ describe('ImagesComponent', () => {
 
     service = debugElement.injector.get(ImageService);
     serviceSpy = spyOn(service, 'getImages').and.callThrough();
+
   });
 
   it('should create images component', () => {
@@ -60,4 +62,5 @@ describe('ImagesComponent', () => {
     expect(component.showSpinner).toBe(true);
     expect(serviceSpy).toHaveBeenCalled();
   });
+
 });
