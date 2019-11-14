@@ -1,6 +1,6 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {ImageListComponent} from './image-list.component';
+import { ImageListComponent } from './image-list.component';
 
 describe('ImageListComponent', () => {
   let component: ImageListComponent;
@@ -8,9 +8,8 @@ describe('ImageListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ImageListComponent]
-    })
-      .compileComponents();
+      declarations: [ImageListComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -27,5 +26,4 @@ describe('ImageListComponent', () => {
   it('should not have any value by default', () => {
     expect(component.images).not.toBeDefined();
   });
-
 });

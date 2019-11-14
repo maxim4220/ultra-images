@@ -1,5 +1,5 @@
 export interface Images {
-   data: [];
-   meta: {};
-   pagination: {}
-  }
+  data: [];
+  meta: {};
+  pagination: {};
+}

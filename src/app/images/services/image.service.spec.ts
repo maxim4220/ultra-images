@@ -1,9 +1,8 @@
-import {Observable} from 'rxjs';
-import {TestBed} from '@angular/core/testing';
+import { Observable } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
 
-import {ImageService} from './image.service';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-
+import { ImageService } from './image.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('ImageService', () => {
   let service: ImageService;
@@ -12,7 +11,7 @@ describe('ImageService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ImageService]
+      providers: [ImageService],
     });
     // inject the service
     service = TestBed.get(ImageService);
@@ -32,8 +31,4 @@ describe('ImageService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
 });
-
-
-

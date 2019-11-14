@@ -1,15 +1,14 @@
-import {Component, OnDestroy,} from '@angular/core';
-import {ImageService} from './services/image.service';
-import {finalize, takeUntil, tap} from 'rxjs/operators';
-import {Subject,} from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
+import { ImageService } from './services/image.service';
+import { finalize, takeUntil, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { Images } from './interfaces/images-interface';
 
 @Component({
   selector: 'app-images',
   templateUrl: './images.component.html',
-  styleUrls: ['./images.component.sass']
+  styleUrls: ['./images.component.sass'],
 })
-
 export class ImagesComponent implements OnDestroy {
   public images: Images;
   public pagination: {};
@@ -19,8 +18,7 @@ export class ImagesComponent implements OnDestroy {
   private unsubscribe: Subject<any> = new Subject();
   private searchInput: string;
 
-  constructor(private imageService: ImageService) {
-  }
+  constructor(private imageService: ImageService) {}
 
   ngOnDestroy() {
     this.unsubscribe.next();
@@ -44,7 +42,8 @@ export class ImagesComponent implements OnDestroy {
     if (offset) {
       searchParams += offset;
     }
-    this.imageService.getImages(searchParams)
+    this.imageService
+      .getImages(searchParams)
       .pipe(
         tap(response => {
           if (response.data.length > 0) {
@@ -59,7 +58,7 @@ export class ImagesComponent implements OnDestroy {
         finalize(() => {
           this.showSpinner = false;
         })
-      ).subscribe();
+      )
+      .subscribe();
   }
-
 }

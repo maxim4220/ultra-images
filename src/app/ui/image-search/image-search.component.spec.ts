@@ -1,9 +1,9 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {ImageSearchComponent} from './image-search.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterTestingModule} from '@angular/router/testing';
-import {By} from '@angular/platform-browser';
+import { ImageSearchComponent } from './image-search.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
 
 describe('ImageSearchComponent', () => {
   let component: ImageSearchComponent;
@@ -12,9 +12,8 @@ describe('ImageSearchComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ImageSearchComponent],
-      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule]
-    })
-      .compileComponents();
+      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -32,10 +31,10 @@ describe('ImageSearchComponent', () => {
   });
 
   it('should enter input text and receive on submit', () => {
-      const input = fixture.debugElement.query(By.css('input'));
-      const el = input.nativeElement;
-      expect(el.value).toBe('');
-      el.value = 'cat';
-      expect(el.value).toBe('cat');
+    const input = fixture.debugElement.query(By.css('input'));
+    const el = input.nativeElement;
+    expect(el.value).toBe('');
+    el.value = 'cat';
+    expect(el.value).toBe('cat');
   });
 });

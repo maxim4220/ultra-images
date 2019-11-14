@@ -1,6 +1,6 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {ImagesComponent} from './images.component';
+import { ImagesComponent } from './images.component';
 import { ImageSearchComponent } from '../ui/image-search/image-search.component';
 import { PaginationComponent } from '../ui/pagination/pagination.component';
 import { ImageListComponent } from '../ui/image-list/image-list.component';
@@ -22,9 +22,8 @@ describe('ImagesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ImagesComponent, ImageSearchComponent, PaginationComponent, ImageListComponent, SpinnerComponent],
       imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
-      providers: [ImageService]
-    })
-      .compileComponents();
+      providers: [ImageService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -35,7 +34,6 @@ describe('ImagesComponent', () => {
 
     service = debugElement.injector.get(ImageService);
     serviceSpy = spyOn(service, 'getImages').and.callThrough();
-
   });
 
   it('should create images component', () => {
@@ -51,9 +49,9 @@ describe('ImagesComponent', () => {
   });
 
   it('should call ImageService getImages method when getSearch has been called', () => {
-   component.getSearchOutput('dog');
-   expect(component.showSpinner).toBe(true);
-   expect(serviceSpy).toHaveBeenCalled();
+    component.getSearchOutput('dog');
+    expect(component.showSpinner).toBe(true);
+    expect(serviceSpy).toHaveBeenCalled();
   });
 
   it('should call ImageService getImages method when getPagination has been called', () => {
@@ -61,6 +59,5 @@ describe('ImagesComponent', () => {
     component.getPagination(25);
     expect(component.showSpinner).toBe(true);
     expect(serviceSpy).toHaveBeenCalled();
-   });
-
+  });
 });
