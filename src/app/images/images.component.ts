@@ -1,8 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ImageService } from './services/image.service';
-import { finalize, takeUntil, tap } from 'rxjs/operators';
+import { takeUntil, map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { Images } from './interfaces/images-interface';
 
 @Component({
   selector: 'app-images',
@@ -10,7 +9,7 @@ import { Images } from './interfaces/images-interface';
   styleUrls: ['./images.component.sass'],
 })
 export class ImagesComponent implements OnDestroy {
-  public images: Images;
+  public images: any = [];
   public pagination: {};
   public showSpinner = false;
   public showMessage = true;
@@ -45,20 +44,27 @@ export class ImagesComponent implements OnDestroy {
     this.imageService
       .getImages(searchParams)
       .pipe(
-        tap(response => {
-          if (response.data.length > 0) {
-            this.images = response.data;
-            this.pagination = response.pagination;
-          } else {
-            this.images = null;
-            this.pagination = null;
-          }
+        map(response => {
+          const images = [];
+          response.data.forEach(element => {
+            images.push(element.images.original.url);
+          });
+          return {
+            images,
+            pagination: response.pagination,
+          };
         }),
-        takeUntil(this.unsubscribe),
-        finalize(() => {
-          this.showSpinner = false;
-        })
+        takeUntil(this.unsubscribe)
       )
-      .subscribe();
+      .subscribe(result => {
+        if (result.images.length > 0) {
+          this.images = result.images;
+          this.pagination = result.pagination;
+        } else {
+          this.images = null;
+          this.pagination = null;
+        }
+        this.showSpinner = false;
+      });
   }
 }
