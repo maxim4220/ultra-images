@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
   templateUrl: './image-search.component.html',
   styleUrls: ['./image-search.component.sass'],
 })
+
 export class ImageSearchComponent {
   @Output() emitSearch = new EventEmitter<string>();
   public search: FormControl = new FormControl('');
