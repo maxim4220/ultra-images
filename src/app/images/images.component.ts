@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./images.component.sass'],
 })
 export class ImagesComponent implements OnDestroy {
-  public images: any = [];
+  public images = [];
   public pagination: {};
   public showSpinner = false;
   public showMessage = true;
