@@ -24,17 +24,17 @@ install:
 
 script:
   - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
+  - ng lint
+  - ng build --prod --base-href https://maxim4220.github.io/ultra-images/
+  
+  deploy:
+    provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: dist/test-ultra
+    on:
+      branch: master
 
-
-# script:
-#   - ng lint
-#   - ng build --prod --base-href https://maxim4220.github.io/ultra-images/
   
   
-#   deploy:
-#   provider: pages
-#   skip_cleanup: true
-#   github_token: $GITHUB_TOKEN
-#   local_dir: dist/test-ultra
-#   on:
-#     branch: master   
+   
