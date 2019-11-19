@@ -28,9 +28,9 @@ script:
   - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
 
 
-script:
-  - ng lint
-  - ng build --prod --base-href https://maxim4220.github.io/ultra-images/
+# script:
+#   - ng lint
+#   - ng build --prod --base-href https://maxim4220.github.io/ultra-images/
   
   
   deploy:
