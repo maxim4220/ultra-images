@@ -24,5 +24,4 @@ script:
 
 script:
   - ng lint
-  - npm run test-headless
   - ng build --prod --base-href https://maxim4220.github.io/ultra-images/
