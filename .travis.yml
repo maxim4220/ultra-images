@@ -32,4 +32,4 @@ script:
   github_token: $GITHUB_TOKEN
   local_dir: dist/test-ultra
   on:
-    branch: master  
+    branch: master   
