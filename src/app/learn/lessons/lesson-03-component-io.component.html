@@ -1,0 +1,45 @@
+<section class="lesson">
+  <p class="lesson-kicker">Lesson 3 of 5</p>
+  <h1>input(), output(), model()</h1>
+  <p class="lead">
+    Decorators still work, but the function API is signal-based: an <code>input()</code> is already a signal in the
+    child. No <code>ngOnChanges</code> for simple derived values — use <code>computed</code>.
+  </p>
+
+  <div class="compare">
+    <article class="compare-pane">
+      <h2>Angular 16</h2>
+      <pre class="code-block">{{ v16Snippet }}</pre>
+    </article>
+    <article class="compare-pane">
+      <h2>Angular 20</h2>
+      <pre class="code-block">{{ v20Snippet }}</pre>
+    </article>
+  </div>
+
+  <div class="playground">
+    <h2>Playground</h2>
+    <p><code>input.required()</code> + <code>output()</code></p>
+    <ul class="tag-list">
+      @for (tag of tags(); track tag) {
+        <li>
+          <app-lesson-tag [label]="tag" (removed)="removeTag($event)"></app-lesson-tag>
+        </li>
+      }
+    </ul>
+
+    <p><code>model()</code> two-way without <code>[(favorite)]</code> EventEmitter pair</p>
+    <app-lesson-favorite [(favorite)]="favorite"></app-lesson-favorite>
+    <p>Parent signal: <strong>{{ favorite() }}</strong></p>
+  </div>
+
+  <p class="note">
+    Queries follow the same pattern: <code>viewChild()</code> / <code>contentChild()</code> instead of
+    <code>&#64;ViewChild</code>. In tests, set signal inputs with <code>fixture.componentRef.setInput('label', 'zoneless')</code>.
+  </p>
+
+  <div class="lesson-footer">
+    <a routerLink="/learn/2">← Signals</a>
+    <a routerLink="/learn/4">Next: RxJS interop →</a>
+  </div>
+</section>

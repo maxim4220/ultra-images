@@ -1,17 +1,39 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
+
+interface SearchFormModel {
+  query: string;
+}
 
 @Component({
   selector: 'app-image-search',
   templateUrl: './image-search.component.html',
-  styleUrls: ['./image-search.component.sass'],
+  styleUrl: './image-search.component.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class ImageSearchComponent {
-  @Output() emitSearch = new EventEmitter<string>();
-  public search: FormControl = new FormControl('');
+  public readonly searchSubmitted = output<string>();
 
-  public performSearch(): void {
-    this.emitSearch.emit(this.search.value);
+  protected readonly searchModel = signal<SearchFormModel>({
+    query: '',
+  });
+
+  protected readonly query = computed(() => this.searchModel().query);
+  protected readonly canSubmit = computed(() => this.query().trim().length > 0);
+
+  protected onQueryInput(event: Event): void {
+    const query = (event.target as HTMLInputElement).value;
+    console.log('onQueryInput', query);
+    this.searchModel.set({ query });
+  }
+
+  protected onSubmit(event: Event): void {
+    event.preventDefault();
+
+    const query = this.query().trim();
+    if (!query) {
+      return;
+    }
+
+    this.searchSubmitted.emit(query);
   }
 }

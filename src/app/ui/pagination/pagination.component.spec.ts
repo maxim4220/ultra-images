@@ -1,64 +1,70 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { GIPHY_PAGE_SIZE } from '../../api-config';
+import { createPagination } from '../../../testing/giphy.fixtures';
+import { stabilize } from '../../../testing/test-utils';
 import { PaginationComponent } from './pagination.component';
-import { By } from '@angular/platform-browser';
 
 describe('PaginationComponent', () => {
-  let component: PaginationComponent;
   let fixture: ComponentFixture<PaginationComponent>;
+  let emittedOffsets: number[];
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [PaginationComponent]
-    })
-      .compileComponents();
-  }));
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PaginationComponent],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PaginationComponent);
-    component = fixture.componentInstance;
-    component.pagination = { count: 25, offset: 0, total_count: 100 };
-    fixture.detectChanges();
+    emittedOffsets = [];
+    fixture.componentInstance.pageOffsetChange.subscribe((offset) => emittedOffsets.push(offset));
   });
 
-  it('should create pagination component', () => {
-    expect(component).toBeTruthy();
+  it('does not render controls when count is zero', async () => {
+    fixture.componentRef.setInput('pagination', createPagination({ count: 0 }));
+    await stabilize(fixture);
+
+    expect(fixture.nativeElement.querySelector('[data-cy="pagination"]')).toBeNull();
   });
 
-  it('should have current page equal to 1 by default', () => {
-    component.ngOnChanges();
-    fixture.detectChanges();
-    expect(component.currentPage).toBe(1);
+  it('disables Previous on the first page and emits the next offset', async () => {
+    fixture.componentRef.setInput('pagination', createPagination({ offset: 0, count: 25, total_count: 100 }));
+    await stabilize(fixture);
+
+    const previous = queryButton(fixture, 'pagination-previous');
+    const next = queryButton(fixture, 'pagination-next');
+    const current = fixture.nativeElement.querySelector('[data-cy="pagination-current"]') as HTMLButtonElement;
+
+    expect(previous.disabled).toBe(true);
+    expect(next.disabled).toBe(false);
+    expect(current.textContent?.trim()).toBe('1');
+
+    next.click();
+    await stabilize(fixture);
+
+    expect(emittedOffsets).toEqual([GIPHY_PAGE_SIZE]);
   });
 
-  it('should have next page button', () => {
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('#next-page').textContent).toBe('Next');
+  it('disables Next on the last page and emits the previous offset', async () => {
+    fixture.componentRef.setInput(
+      'pagination',
+      createPagination({ offset: 75, count: 25, total_count: 100 })
+    );
+    await stabilize(fixture);
+
+    const previous = queryButton(fixture, 'pagination-previous');
+    const next = queryButton(fixture, 'pagination-next');
+    const current = fixture.nativeElement.querySelector('[data-cy="pagination-current"]') as HTMLButtonElement;
+
+    expect(previous.disabled).toBe(false);
+    expect(next.disabled).toBe(true);
+    expect(current.textContent?.trim()).toBe('4');
+
+    previous.click();
+    await stabilize(fixture);
+
+    expect(emittedOffsets).toEqual([50]);
   });
-
-  it('should change current page based on offset', () => {
-    component.pagination.offset = 25;
-    component.ngOnChanges();
-    fixture.detectChanges();
-    expect(component.currentPage).toBe(2);
-  });
-
-  it('should not have pagination buttons unless data is received', () => {
-    const addItemDebugElement = fixture.debugElement.query(By.css('.page-item active'));
-    expect(addItemDebugElement).toBeFalsy();
-  });
-
-  it('should output increased pagination offset when pagination triggered', () => {
-    const submitEl = fixture.debugElement.query(By.css('#next-page'));
-    component.emitPagination.subscribe(offset => {
-      component.pagination.offset += offset;
-    });
-    submitEl.triggerEventHandler('click', null);
-    expect(component.pagination.offset).toBe(25);
-  });
-
-
-
 });
 
-
-
+function queryButton(fixture: ComponentFixture<PaginationComponent>, selector: string): HTMLButtonElement {
+  return fixture.nativeElement.querySelector(`[data-cy="${selector}"]`) as HTMLButtonElement;
+}

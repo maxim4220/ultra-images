@@ -1,70 +1,110 @@
-import { Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of, startWith, switchMap } from 'rxjs';
+import { ImageListComponent } from '../ui/image-list/image-list.component';
+import { ImageSearchComponent } from '../ui/image-search/image-search.component';
+import { PaginationComponent } from '../ui/pagination/pagination.component';
+import { SpinnerComponent } from '../ui/spinner/spinner.component';
+import { Pagination } from './models/giphy.model';
 import { ImageService } from './services/image.service';
-import { takeUntil, map } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+
+interface SearchParams {
+  readonly query: string;
+  readonly offset: number;
+}
+
+type ImagesLoadState =
+  | { readonly status: 'idle' }
+  | { readonly status: 'loading' }
+  | {
+      readonly status: 'success';
+      readonly images: readonly string[];
+      readonly pagination: Pagination | null;
+    }
+  | { readonly status: 'error'; readonly message: string };
 
 @Component({
   selector: 'app-images',
+  imports: [ImageSearchComponent, ImageListComponent, PaginationComponent, SpinnerComponent],
   templateUrl: './images.component.html',
-  styleUrls: ['./images.component.sass'],
+  styleUrl: './images.component.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImagesComponent implements OnDestroy {
-  public images = [];
-  public pagination: {};
-  public showSpinner = false;
-  public showMessage = true;
+export class ImagesComponent {
+  private readonly imageService = inject(ImageService);
 
-  private unsubscribe: Subject<any> = new Subject();
-  private searchInput: string;
+  private readonly query = signal('');
+  private readonly offset = signal(0);
 
-  constructor(private imageService: ImageService) {}
+  private readonly searchParams = computed<SearchParams>(() => ({
+    query: this.query(),
+    offset: this.offset(),
+  }));
 
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
+  private readonly images$ = toObservable(this.searchParams).pipe(
+    switchMap(({ query, offset }) => {
+      if (query.length === 0) {
+        return of<ImagesLoadState>({ status: 'idle' });
+      }
 
-  public getPagination(event): void {
-    const offset = '&offset=' + event;
-    this.loadImages(offset);
-  }
+      return this.imageService.getImages(query, offset).pipe(
+        map(
+          (result): ImagesLoadState => ({
+            status: 'success',
+            images: result.images,
+            pagination: result.images.length > 0 ? result.pagination : null,
+          })
+        ),
+        catchError(() =>
+          of<ImagesLoadState>({
+            status: 'error',
+            message: 'Unable to load images. Please try again.',
+          })
+        ),
+        startWith<ImagesLoadState>({ status: 'loading' })
+      );
+    })
+  );
 
-  public getSearchOutput(event): void {
-    this.showMessage = false;
-    this.searchInput = event;
-    this.loadImages();
-  }
+  protected readonly loadState = toSignal(this.images$, {
+    initialValue: { status: 'idle' } satisfies ImagesLoadState,
+  });
 
-  private loadImages(offset?): void {
-    this.showSpinner = true;
-    let searchParams = '&q=' + this.searchInput;
-    if (offset) {
-      searchParams += offset;
-    }
-    this.imageService
-      .getImages(searchParams)
-      .pipe(
-        map(response => {
-          const images = [];
-          response.data.forEach(element => {
-            images.push(element.images.fixed_width_downsampled.url);
-          });
-          return {
-            images,
-            pagination: response.pagination,
-          };
-        }),
-        takeUntil(this.unsubscribe)
-      )
-      .subscribe(result => {
-        if (result.images.length > 0) {
-          this.images = result.images;
-          this.pagination = result.pagination;
-        } else {
-          this.images = null;
-          this.pagination = null;
-        }
-        this.showSpinner = false;
+  protected readonly isLoading = computed(() => this.loadState().status === 'loading');
+  protected readonly showWelcome = computed(() => this.loadState().status === 'idle');
+  protected readonly showResults = computed(() => this.loadState().status === 'success');
+  protected readonly errorMessage = computed(() => {
+    const state = this.loadState();
+    return state.status === 'error' ? state.message : null;
+  });
+  protected readonly images = computed(() => {
+    const state = this.loadState();
+    return state.status === 'success' ? state.images : [];
+  });
+  protected readonly pagination = computed(() => {
+    const state = this.loadState();
+    return state.status === 'success' ? state.pagination : null;
+  });
+
+  constructor() {
+    effect(() => {
+      const state = this.loadState();
+      if (state.status !== 'success') {
+        return;
+      }
+
+      untracked(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
+    });
+  }
+
+  public onSearch(query: string): void {
+    this.offset.set(0);
+    this.query.set(query);
+  }
+
+  public onPageOffsetChange(offset: number): void {
+    this.offset.set(offset);
   }
 }

@@ -1,0 +1,6 @@
+<span class="tag">
+  {{ label() }}
+  <button class="btn btn-sm btn-link" type="button" (click)="remove()" [attr.aria-label]="'Remove ' + label()">
+    x
+  </button>
+</span>

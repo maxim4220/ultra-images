@@ -1,0 +1,23 @@
+{
+  "data": [
+    {
+      "images": {
+        "fixed_width_downsampled": {
+          "url": "https://media.giphy.com/media/page-two-a.gif"
+        }
+      }
+    },
+    {
+      "images": {
+        "fixed_width_downsampled": {
+          "url": "https://media.giphy.com/media/page-two-b.gif"
+        }
+      }
+    }
+  ],
+  "pagination": {
+    "count": 25,
+    "offset": 25,
+    "total_count": 50
+  }
+}

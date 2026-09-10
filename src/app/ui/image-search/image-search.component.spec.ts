@@ -1,40 +1,59 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { createStableFixture, stabilize } from '../../../testing/test-utils';
 import { ImageSearchComponent } from './image-search.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
 
 describe('ImageSearchComponent', () => {
-  let component: ImageSearchComponent;
   let fixture: ComponentFixture<ImageSearchComponent>;
+  let emittedQueries: string[];
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ImageSearchComponent],
-      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ImageSearchComponent],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ImageSearchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture = await createStableFixture(ImageSearchComponent);
+    emittedQueries = [];
+    fixture.componentInstance.searchSubmitted.subscribe((query) => emittedQueries.push(query));
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('disables search until the query has a non-whitespace value', async () => {
+    const button = querySubmitButton(fixture);
+
+    expect(button.disabled).toBe(true);
+
+    typeQuery(fixture, '   ');
+    await stabilize(fixture);
+
+    expect(querySubmitButton(fixture).disabled).toBe(true);
   });
 
-  it('should have search form value as empty string by default', () => {
-    expect(component.search.value).toBe('');
+  it('enables search and emits a trimmed query on submit', async () => {
+    typeQuery(fixture, '  cats  ');
+    await stabilize(fixture);
+
+    const form = fixture.nativeElement.querySelector('form') as HTMLFormElement;
+    form.dispatchEvent(new Event('submit'));
+    await stabilize(fixture);
+
+    expect(querySubmitButton(fixture).disabled).toBe(false);
+    expect(emittedQueries).toEqual(['cats']);
   });
 
-  it('should enter input text and receive on submit', () => {
-    const input = fixture.debugElement.query(By.css('input'));
-    const el = input.nativeElement;
-    expect(el.value).toBe('');
-    el.value = 'cat';
-    expect(el.value).toBe('cat');
+  it('does not emit when the query is empty', async () => {
+    const form = fixture.nativeElement.querySelector('form') as HTMLFormElement;
+    form.dispatchEvent(new Event('submit'));
+    await stabilize(fixture);
+
+    expect(emittedQueries).toEqual([]);
   });
 });
+
+function querySubmitButton(fixture: ComponentFixture<ImageSearchComponent>): HTMLButtonElement {
+  return fixture.nativeElement.querySelector('[data-cy="search-submit"]') as HTMLButtonElement;
+}
+
+function typeQuery(fixture: ComponentFixture<ImageSearchComponent>, value: string): void {
+  const input = fixture.nativeElement.querySelector('[data-cy="search-input"]') as HTMLInputElement;
+  input.value = value;
+  input.dispatchEvent(new Event('input'));
+}

@@ -1,0 +1,22 @@
+<div class="learn">
+  <aside class="learn-sidebar">
+    <p class="learn-kicker">Angular 16 → 20</p>
+    <h2>Five lessons</h2>
+    <nav class="learn-nav" aria-label="Lessons">
+      <a routerLink="/learn" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">Overview</a>
+      @for (lesson of lessons; track lesson.id) {
+        <a [routerLink]="['/learn', lesson.path]" routerLinkActive="is-active">
+          <span class="learn-nav-index">{{ lesson.id }}</span>
+          <span>
+            <strong>{{ lesson.title }}</strong>
+            <small>{{ lesson.subtitle }}</small>
+          </span>
+        </a>
+      }
+    </nav>
+    <a class="learn-giphy" routerLink="/images">Back to Giphy app</a>
+  </aside>
+  <div class="learn-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

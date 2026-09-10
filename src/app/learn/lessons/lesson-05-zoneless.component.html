@@ -1,0 +1,49 @@
+<section class="lesson">
+  <p class="lesson-kicker">Lesson 5 of 5</p>
+  <h1>Zoneless change detection</h1>
+  <p class="lead">
+    This app does not load <code>zone.js</code>. Angular no longer monkey-patches <code>setTimeout</code> or XHR.
+    The view updates when a signal changes, a template listener runs, <code>setInput</code> is called, or you
+    call <code>markForCheck()</code>.
+  </p>
+
+  <div class="compare">
+    <article class="compare-pane">
+      <h2>Angular 16 + Zone.js</h2>
+      <pre class="code-block">{{ v16Snippet }}</pre>
+    </article>
+    <article class="compare-pane">
+      <h2>Angular 20 zoneless</h2>
+      <pre class="code-block">{{ v20Snippet }}</pre>
+    </article>
+  </div>
+
+  <div class="playground">
+    <h2>Playground — wait 600ms after the delayed buttons</h2>
+    <div class="playground-row">
+      <button class="btn btn-outline-secondary" type="button" (click)="bumpPlainNow()">
+        Plain ++ in click (works)
+      </button>
+      <button class="btn btn-outline-danger" type="button" (click)="bumpPlainLater()">
+        Plain ++ in setTimeout (stays stale)
+      </button>
+      <button class="btn btn-primary" type="button" (click)="bumpSignalLater()">
+        Signal ++ in setTimeout (updates)
+      </button>
+    </div>
+    <p>plainCount: <span class="plain-value">{{ plainCount }}</span></p>
+    <p>signalCount: <span class="signal-value">{{ signalCount() }}</span></p>
+  </div>
+
+  <p class="note">
+    Click handlers still refresh the view, so <code>plainCount++</code> in a <code>(click)</code> looks fine.
+    The trap is async work: HTTP, timers, WebSockets. Put that data in a signal (or <code>toSignal</code>) and
+    zoneless just works. That is why the Giphy service returns an Observable that the page converts with
+    <code>toSignal()</code>.
+  </p>
+
+  <div class="lesson-footer">
+    <a routerLink="/learn/4">← RxJS interop</a>
+    <a routerLink="/images">Apply it in the Giphy app →</a>
+  </div>
+</section>

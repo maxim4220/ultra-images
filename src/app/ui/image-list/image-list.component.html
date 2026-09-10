@@ -1,14 +1,14 @@
-<div *ngIf="images; else notFoundBlock" class="ap-flex-container">
-  <ng-container *ngFor="let image of images">
-    <div class="ap-flex-item mb-2 mt-2">
-      <img [src]="image" alt="loading..." class="ap-image" />
-    </div>
-  </ng-container>
-</div>
-
-<ng-template #notFoundBlock>
-  <div class="mt-2" id="ap-not-found-block">
+@if (images().length) {
+  <div class="ap-flex-container" data-cy="image-list">
+    @for (image of images(); track image) {
+      <div class="ap-flex-item mb-2 mt-2">
+        <img [src]="image" alt="GIF search result" class="ap-image" data-cy="gif-image" />
+      </div>
+    }
+  </div>
+} @else {
+  <div class="mt-2" id="ap-not-found-block" data-cy="not-found">
     <h3>We're Sorry!</h3>
     <h5>We can't seem to find any images that match your search.</h5>
   </div>
-</ng-template>
+}

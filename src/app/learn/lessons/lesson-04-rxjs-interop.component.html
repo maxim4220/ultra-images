@@ -1,0 +1,48 @@
+<section class="lesson">
+  <p class="lesson-kicker">Lesson 4 of 5</p>
+  <h1>RxJS is still here — bridge it with toSignal()</h1>
+  <p class="lead">
+    Keep RxJS for HTTP, switchMap, and cancellation. Convert the stream you want to render with
+    <code>toSignal()</code>. That is exactly how the Giphy page loads images. Going the other way:
+    <code>toObservable(signal)</code>.
+  </p>
+
+  <div class="compare">
+    <article class="compare-pane">
+      <h2>Angular 16</h2>
+      <pre class="code-block">{{ v16Snippet }}</pre>
+    </article>
+    <article class="compare-pane">
+      <h2>Angular 20</h2>
+      <pre class="code-block">{{ v20Snippet }}</pre>
+    </article>
+  </div>
+
+  <div class="playground">
+    <h2>Playground — signal query in, HTTP-like Observable out</h2>
+    <div class="playground-row">
+      <button class="btn btn-primary" type="button" (click)="setQuery('cat')">cat</button>
+      <button class="btn btn-primary" type="button" (click)="setQuery('dog')">dog</button>
+    </div>
+    <p>query signal: <strong>{{ query() }}</strong></p>
+    <p>result count (computed from toSignal): <strong>{{ resultCount() }}</strong></p>
+    <ul class="tag-list">
+      @for (item of results(); track item) {
+        <li class="tag">{{ item }}</li>
+      } @empty {
+        <li>No matches.</li>
+      }
+    </ul>
+  </div>
+
+  <p class="note">
+    <code>toSignal()</code> unsubscribes when the component is destroyed — no <code>takeUntil</code> subject.
+    Angular 19+ also has <code>rxResource()</code> / <code>resource()</code> as a higher-level async helper. This app
+    uses the explicit interop so you can see every step.
+  </p>
+
+  <div class="lesson-footer">
+    <a routerLink="/learn/3">← Component I/O</a>
+    <a routerLink="/learn/5">Next: Zoneless →</a>
+  </div>
+</section>

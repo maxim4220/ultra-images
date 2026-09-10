@@ -1,24 +1,25 @@
-import { async, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { AppComponent } from './app.component';
+import { createStableFixture } from '../testing/test-utils';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [AppComponent],
-    }).compileComponents();
-  }));
+  let fixture: ComponentFixture<AppComponent>;
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AppComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+
+    fixture = await createStableFixture(AppComponent);
   });
 
-  it(`should have as title 'test-ultra'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('test-ultra');
+  it('renders the home navigation link', () => {
+    const homeLink = fixture.nativeElement.querySelector('[data-cy="home-link"]') as HTMLAnchorElement;
+
+    expect(homeLink).toBeTruthy();
+    expect(homeLink.textContent?.trim()).toBe('Giphy');
+    expect(homeLink.getAttribute('href')).toBe('/');
   });
 });

@@ -1,0 +1,22 @@
+<section class="lesson">
+  <p class="lesson-kicker">Start here</p>
+  <h1>You already know Angular. This is the delta to v20.</h1>
+  <p class="lead">
+    Angular 16 already gave you standalone components, <code>inject()</code>, and Signals in developer preview.
+    v17–v20 made that model the default: new templates, stable Signals, new component I/O, and zoneless change detection.
+  </p>
+
+  <ol class="lesson-grid">
+    @for (lesson of lessons; track lesson.id) {
+      <li>
+        <a class="lesson-card" [routerLink]="['/learn', lesson.path]">
+          <span>Lesson {{ lesson.id }}</span>
+          <h2>{{ lesson.title }}</h2>
+          <p>{{ lesson.subtitle }}</p>
+        </a>
+      </li>
+    }
+  </ol>
+
+  <p>Work them in order. Each page has a v16 reminder, the v20 version, and a live playground.</p>
+</section>

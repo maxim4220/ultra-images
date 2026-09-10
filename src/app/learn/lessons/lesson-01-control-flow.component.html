@@ -1,0 +1,70 @@
+<section class="lesson">
+  <p class="lesson-kicker">Lesson 1 of 5</p>
+  <h1>New template syntax</h1>
+  <p class="lead">
+    Drop <code>*ngIf</code>, <code>*ngFor</code>, and <code>ngSwitch</code>. The new blocks are built into the template,
+    typed, and faster. <code>track</code> is required on <code>&#64;for</code>.
+  </p>
+
+  <div class="compare">
+    <article class="compare-pane">
+      <h2>Angular 16</h2>
+      <pre class="code-block">{{ v16Snippet }}</pre>
+    </article>
+    <article class="compare-pane">
+      <h2>Angular 20</h2>
+      <pre class="code-block">{{ v20Snippet }}</pre>
+    </article>
+  </div>
+
+  <div class="playground">
+    <h2>Playground</h2>
+    <div class="playground-row">
+      <button class="btn btn-primary" type="button" (click)="toggleDetails()">Toggle &#64;if</button>
+      <button class="btn btn-outline-secondary" type="button" (click)="cycleMode()">Cycle &#64;switch</button>
+    </div>
+
+    @if (showDetails()) {
+      <p>Details are visible. Empty <code>&#64;else</code> is just another block — no <code>ng-template</code>.</p>
+    } @else {
+      <p>Hidden. Click the first button.</p>
+    }
+
+    <ul class="tag-list">
+      @for (tag of tags(); track tag) {
+        <li class="tag">{{ tag }}</li>
+      } @empty {
+        <li>No tags. <code>&#64;empty</code> replaces <code>*ngIf="!items.length"</code>.</li>
+      }
+    </ul>
+
+    @switch (mode()) {
+      @case ('idle') {
+        <p>Mode: idle</p>
+      }
+      @case ('ready') {
+        <p>Mode: ready</p>
+      }
+      @default {
+        <p>Mode: done</p>
+      }
+    }
+
+    <h2>&#64;defer</h2>
+    <p>Click to lazy-load a child component. The Giphy image grid uses the same idea.</p>
+    @defer (on interaction) {
+      <app-deferred-panel></app-deferred-panel>
+    } @placeholder {
+      <p>Click this area to load the deferred component.</p>
+    }
+  </div>
+
+  <p class="note">
+    Daily rule: never put <code>trackBy</code> functions in the class for lists — use <code>track item.id</code> (or another stable key) in the template.
+  </p>
+
+  <div class="lesson-footer">
+    <a routerLink="/learn">Overview</a>
+    <a routerLink="/learn/2">Next: Signals →</a>
+  </div>
+</section>

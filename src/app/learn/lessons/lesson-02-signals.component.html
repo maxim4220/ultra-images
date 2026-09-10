@@ -1,0 +1,44 @@
+<section class="lesson">
+  <p class="lesson-kicker">Lesson 2 of 5</p>
+  <h1>Signals are the default state model</h1>
+  <p class="lead">
+    v16 shipped Signals as developer preview. In v20 they are stable and you should reach for them before a
+    <code>BehaviorSubject</code>. Read them with <code>()</code>. Derive with <code>computed</code>. Use
+    <code>effect</code> only for side effects (title, analytics, scroll).
+  </p>
+
+  <div class="compare">
+    <article class="compare-pane">
+      <h2>Angular 16 habit</h2>
+      <pre class="code-block">{{ v16Snippet }}</pre>
+    </article>
+    <article class="compare-pane">
+      <h2>Angular 20</h2>
+      <pre class="code-block">{{ v20Snippet }}</pre>
+    </article>
+  </div>
+
+  <div class="playground">
+    <h2>Playground — this is how the Giphy page should think</h2>
+    <div class="playground-row">
+      <button class="btn btn-primary" type="button" (click)="setQuery('cats')">query = cats</button>
+      <button class="btn btn-primary" type="button" (click)="setQuery('dogs')">query = dogs</button>
+      <button class="btn btn-outline-secondary" type="button" (click)="nextPage()">page++</button>
+    </div>
+    <p>query: <strong>{{ query() }}</strong></p>
+    <p>page: <strong>{{ page() }}</strong> — resets to 1 when query changes (<code>linkedSignal</code>)</p>
+    <p>computed resultCount: <strong>{{ resultCount() }}</strong></p>
+    <p class="log">{{ log() }}</p>
+  </div>
+
+  <p class="note">
+    <code>effect</code> is not for derived state. If you can write it as <code>computed</code> or
+    <code>linkedSignal</code>, do that. The Giphy app uses <code>computed</code> for loading/results and
+    <code>effect</code> only to scroll to top.
+  </p>
+
+  <div class="lesson-footer">
+    <a routerLink="/learn/1">← Template syntax</a>
+    <a routerLink="/learn/3">Next: Component I/O →</a>
+  </div>
+</section>

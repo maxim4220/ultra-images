@@ -1,8 +1,10 @@
-import { Observable } from 'rxjs';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { GIPHY_PAGE_SIZE, GIPHY_SEARCH_API } from '../../api-config';
+import { environment } from '../../../environments/environment';
+import { createGiphySearchResponse, mockImageUrls } from '../../../testing/giphy.fixtures';
 import { ImageService } from './image.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('ImageService', () => {
   let service: ImageService;
@@ -10,25 +12,49 @@ describe('ImageService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ImageService],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     });
-    // inject the service
-    service = TestBed.get(ImageService);
-    httpMock = TestBed.get(HttpTestingController);
+
+    service = TestBed.inject(ImageService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should get the data successful from Giphy', () => {
-    service.getImages('&q=10').subscribe((result: Observable<any>) => {
-      expect(result).toBeDefined();
-    });
-    const req = httpMock.expectOne('http://api.giphy.com/v1/gifs/search?api_key=krYLN9xmR99j1WQkm5nERGA0w3bXmD2D&q=10');
-    expect(req.request.method).toBe('GET');
-    req.flush(10);
+  afterEach(() => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('requests GIFs with the API key, query, offset, and page size', () => {
+    const query = 'cats';
+    const offset = 25;
+
+    service.getImages(query, offset).subscribe((result) => {
+      expect(result.images).toEqual([...mockImageUrls]);
+      expect(result.pagination).toEqual({
+        count: 25,
+        offset: 0,
+        total_count: 100,
+      });
+    });
+
+    const request = httpMock.expectOne((req) => req.url === GIPHY_SEARCH_API && req.method === 'GET');
+
+    expect(request.request.params.get('api_key')).toBe(environment.apiKey);
+    expect(request.request.params.get('q')).toBe(query);
+    expect(request.request.params.get('offset')).toBe('25');
+    expect(request.request.params.get('limit')).toBe(String(GIPHY_PAGE_SIZE));
+
+    request.flush(createGiphySearchResponse());
+  });
+
+  it('maps Giphy payload URLs and pagination into the view model', () => {
+    let images: readonly string[] = [];
+
+    service.getImages('dogs', 0).subscribe((result) => {
+      images = result.images;
+    });
+
+    httpMock.expectOne((req) => req.url === GIPHY_SEARCH_API).flush(createGiphySearchResponse(['https://media.giphy.com/custom.gif']));
+
+    expect(images).toEqual(['https://media.giphy.com/custom.gif']);
   });
 });

@@ -1,63 +1,99 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ImagesComponent } from './images.component';
-import { ImageSearchComponent } from '../ui/image-search/image-search.component';
-import { PaginationComponent } from '../ui/pagination/pagination.component';
-import { ImageListComponent } from '../ui/image-list/image-list.component';
-import { SpinnerComponent } from '../ui/spinner/spinner.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, DeferBlockBehavior, TestBed } from '@angular/core/testing';
+import { NEVER, of, throwError } from 'rxjs';
+import { createImageSearchResult, createPagination } from '../../testing/giphy.fixtures';
+import { createStableFixture, stabilize } from '../../testing/test-utils';
 import { ImageService } from './services/image.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { DebugElement } from '@angular/core';
+import { ImagesComponent } from './images.component';
 
 describe('ImagesComponent', () => {
-  let component: ImagesComponent;
   let fixture: ComponentFixture<ImagesComponent>;
-  let service: ImageService;
-  let debugElement: DebugElement;
-  let serviceSpy;
+  let getImages: jest.Mock;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ImagesComponent, ImageSearchComponent, PaginationComponent, ImageListComponent, SpinnerComponent],
-      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
-      providers: [ImageService],
+  beforeEach(async () => {
+    getImages = jest.fn();
+
+    await TestBed.configureTestingModule({
+      imports: [ImagesComponent],
+      deferBlockBehavior: DeferBlockBehavior.Playthrough,
+      providers: [{ provide: ImageService, useValue: { getImages } }],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ImagesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    debugElement = fixture.debugElement;
-
-    service = debugElement.injector.get(ImageService);
-    serviceSpy = spyOn(service, 'getImages').and.callThrough();
+    fixture = await createStableFixture(ImagesComponent);
   });
 
-  it('should create images component', () => {
-    expect(component).toBeTruthy();
+  it('shows the welcome message before a search', () => {
+    expect(fixture.nativeElement.querySelector('[data-cy="welcome-message"]')).toBeTruthy();
+    expect(getImages).not.toHaveBeenCalled();
   });
 
-  it('should should reassign properties when pagination called', () => {
-    component.getPagination(25);
-    expect(component.showMessage).toBe(true);
-    component.getSearchOutput('dog');
-    expect(component.showMessage).toBe(false);
-    expect(component.showSpinner).toBe(true);
+  it('shows a spinner while results are loading', async () => {
+    getImages.mockReturnValue(NEVER);
+
+    fixture.componentInstance.onSearch('cats');
+    await stabilize(fixture);
+
+    expect(fixture.nativeElement.querySelector('[data-cy="spinner"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('[data-cy="welcome-message"]')).toBeNull();
   });
 
-  it('should call ImageService getImages method when getSearch has been called', () => {
-    component.getSearchOutput('dog');
-    expect(component.showSpinner).toBe(true);
-    expect(serviceSpy).toHaveBeenCalled();
+  it('renders images and pagination after a successful search', async () => {
+    const result = createImageSearchResult();
+    getImages.mockReturnValue(of(result));
+
+    fixture.componentInstance.onSearch('cats');
+    await stabilize(fixture);
+
+    const images = fixture.nativeElement.querySelectorAll('[data-cy="gif-image"]');
+    expect(images).toHaveLength(result.images.length);
+    expect(getImages).toHaveBeenCalledWith('cats', 0);
+    expect(fixture.nativeElement.querySelector('[data-cy="pagination"]')).toBeTruthy();
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
   });
 
-  it('should call ImageService getImages method when getPagination has been called', () => {
-    expect(serviceSpy).not.toHaveBeenCalled();
-    component.getPagination(25);
-    expect(component.showSpinner).toBe(true);
-    expect(serviceSpy).toHaveBeenCalled();
+  it('shows the empty state when the API returns no images', async () => {
+    getImages.mockReturnValue(
+      of(
+        createImageSearchResult({
+          images: [],
+          pagination: createPagination({ count: 0, total_count: 0 }),
+        })
+      )
+    );
+
+    fixture.componentInstance.onSearch('unknown');
+    await stabilize(fixture);
+
+    expect(fixture.nativeElement.querySelector('[data-cy="not-found"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('[data-cy="pagination"]')).toBeNull();
+  });
+
+  it('shows an error message when the request fails', async () => {
+    getImages.mockReturnValue(throwError(() => new Error('network')));
+
+    fixture.componentInstance.onSearch('cats');
+    await stabilize(fixture);
+
+    const error = fixture.nativeElement.querySelector('[data-cy="error-message"]') as HTMLElement;
+    expect(error.textContent).toContain('Unable to load images. Please try again.');
+  });
+
+  it('requests the next page with the emitted offset', async () => {
+    getImages.mockReturnValue(of(createImageSearchResult()));
+
+    fixture.componentInstance.onSearch('cats');
+    await stabilize(fixture);
+
+    getImages.mockReturnValue(
+      of(
+        createImageSearchResult({
+          pagination: createPagination({ offset: 25 }),
+        })
+      )
+    );
+
+    fixture.componentInstance.onPageOffsetChange(25);
+    await stabilize(fixture);
+
+    expect(getImages).toHaveBeenLastCalledWith('cats', 25);
   });
 });

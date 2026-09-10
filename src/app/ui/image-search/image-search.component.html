@@ -1,15 +1,26 @@
-<form class="mt-4" novalidate (ngSubmit)="performSearch()">
+<form class="mt-4" novalidate (submit)="onSubmit($event)">
   <div class="input-group">
     <input
-      [formControl]="search"
+      [value]="query()"
+      (input)="onQueryInput($event)"
       placeholder="Search..."
       autocomplete="off"
       class="form-control"
       id="search"
       type="text"
+      aria-label="Search GIFs"
+      data-cy="search-input"
     />
     <div class="input-group-append">
-      <button id="search-button" class="btn btn-outline-primary" type="submit">Search</button>
+      <button
+        id="search-button"
+        class="btn btn-outline-primary"
+        type="submit"
+        [disabled]="!canSubmit()"
+        data-cy="search-submit"
+      >
+        Search
+      </button>
     </div>
   </div>
 </form>

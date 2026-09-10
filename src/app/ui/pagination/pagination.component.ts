@@ -1,33 +1,43 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
-import { Pagination } from '../interfaces/pagination.interface';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { GIPHY_PAGE_SIZE } from '../../api-config';
+import { Pagination } from '../../images/models/giphy.model';
 
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.sass'],
+  styleUrl: './pagination.component.sass',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PaginationComponent implements OnChanges {
-  public currentPage: number;
-  public countStep = 25;
-  public showNextButton = true;
+export class PaginationComponent {
+  public readonly pagination = input.required<Pagination>();
+  public readonly pageSize = input(GIPHY_PAGE_SIZE);
+  public readonly pageOffsetChange = output<number>();
 
-  @Input() pagination: Pagination;
-  @Output() emitPagination = new EventEmitter<string>();
+  protected readonly currentPage = computed(() => {
+    const { offset, count } = this.pagination();
+    const pageSize = count || this.pageSize();
+    return Math.floor(offset / pageSize) + 1;
+  });
 
-  ngOnChanges(): void {
-    this.showNextButton = this.pagination.total_count !== this.pagination.offset + this.pagination.count;
-    if (this.pagination.offset === 0) {
-      this.currentPage = 1;
-    } else {
-      if (this.pagination.offset % this.pagination.count === 0) {
-        this.currentPage = this.pagination.offset / this.pagination.count + 1;
-      } else {
-        this.pagination.count < this.countStep ? this.currentPage++ : this.currentPage--;
-      }
+  protected readonly hasPrevious = computed(() => this.pagination().offset > 0);
+  protected readonly hasNext = computed(() => {
+    const { offset, count, total_count } = this.pagination();
+    return offset + count < total_count;
+  });
+
+  protected goToPrevious(): void {
+    if (!this.hasPrevious()) {
+      return;
     }
+
+    this.pageOffsetChange.emit(Math.max(0, this.pagination().offset - this.pageSize()));
   }
 
-  public startPagination(offset) {
-    return this.emitPagination.emit(offset);
+  protected goToNext(): void {
+    if (!this.hasNext()) {
+      return;
+    }
+
+    this.pageOffsetChange.emit(this.pagination().offset + this.pageSize());
   }
 }
